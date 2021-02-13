@@ -206,8 +206,9 @@ const App = () => {
           <ProductPage 
           product={product} 
           onAddToCart={handleAddToCart} 
-          onUpdateCartQty={handleUpdateCartQty}  
+          /* onUpdateCartQty={handleUpdateCartQty} */  
           accordionData={accordionDataEh}
+          handleUpdateCartQty
           />
         </Route>
       ))}

@@ -8,6 +8,9 @@ import Product from '../Products/Product/Product';
 import Products from '../Products/Products.jsx';
 import {Link} from 'react-router-dom';
 import CustomAccordion from '../CostumAccordion/CustomAccordion';
+import { commerce } from '../../lib/commerce';
+import { toast } from "react-toastify";
+
 
 
 const ProductPage = ({product, onAddToCart, accordionData}) => {
@@ -16,7 +19,54 @@ const ProductPage = ({product, onAddToCart, accordionData}) => {
 
 
 
+          /* ------try of product variant------------- */
+          const { variants, assets, meta, related_products } = product;
+          const [cart, setCart] = useState({});
 
+
+          const handleUpdateCartQty = async (lineItemId, quantity) => {
+            const response = await commerce.cart.update(lineItemId, { quantity });
+        
+            setCart(response.cart);
+          };
+      
+    
+          const initialVariants = React.useMemo(
+            () =>
+              variants.reduce((all, { id, options }) => {
+                const [firstOption] = options;
+        
+                return { ...all, [id]: firstOption.id };
+              }, {}),
+            [product.permalink]
+          );
+        
+          const [selectedVariants, setSelectedVariants] = React.useState(
+            initialVariants
+          );
+        
+        
+          const addToCart = () =>
+          commerce.cart
+            .add(product.id, 1, selectedVariants)
+            .then(({ cart }) => {
+              setCart(cart);
+                
+              return cart;
+            })
+            .then(({ subtotal }) =>
+              toast(
+                `${product.name} is now in your cart. Your subtotal is now ${subtotal.formatted_with_symbol}. Click to view what's in your cart.`,
+                /* {
+                  onClick: openModal,
+                } */
+              )
+            )
+            .catch(() => {
+              toast.error("Please try again.");
+            });
+        
+        /* ----------end of try------------- */
 
 
 
@@ -57,7 +107,7 @@ const ProductPage = ({product, onAddToCart, accordionData}) => {
                     <Grid container gutterBottom>
                         {product.variants.length > 0 && (product.variants[0].options.map((option) => (
                             <Grid item className={classes.option} gutterBottom>
-                                <Button variant="contained" className={classes.optionName} /* onClick={addToCart} */>{option.name}</Button> 
+                                <Button variant="contained" className={classes.optionName} onClick={addToCart}>{option.name}</Button> 
                                 <Typography className={classes.optionPrice}>{option.price.formatted_with_symbol}</Typography>
                             </Grid> )
                         ))}
