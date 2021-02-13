@@ -66,7 +66,7 @@ const ProductPage = ({product, onAddToCart, accordionData}) => {
               toast.error("Please try again.");
             });
         
-        /* ----------end of try--------------- */
+        /* ----------end of try---------- */
 
 
 
