@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CssBaseline, Container, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Navbar, Products, Cart, Checkout, StartingPage, Footer, ProductPage, Agb, Impressum, Datenschutz, Widerrufsbelehrung } from './components';
+import { Navbar, Products, Cart, Checkout, StartingPage, Footer, ProductPage, Agb, Impressum, Datenschutz, Widerrufsbelehrung, ThankYou } from './components';
 import { commerce } from './lib/commerce';
 import ProductImgOneEh from './assets/qrios-shop3.jpg';
 import ProductImgTwoEh from './assets/istockphoto-maske-schwarz.jpg';
@@ -74,6 +74,7 @@ const App = () => {
     const response = await commerce.cart.update(lineItemId, { quantity });
 
     setCart(response.cart);
+    console.log(response.cart)
   };
 
   const handleRemoveFromCart = async (lineItemId) => {
@@ -112,26 +113,6 @@ const App = () => {
   }, []);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-/*   console.log('####################');
-  const createUnderpage = () => {
-    const linkList = [];
-    for (let key in products){ 
-      var perLink = products[key].permalink;
-      linkList.push(perLink);
-    };
-    console.log(linkList);
-    return linkList
-  } 
-  const mapData = createUnderpage(); */
-
-/*   const startPageProducts = () => {
-    const startingProducts = [];
-    for(var i = 0; i < products.length + 1; i++){
-      console.log(products[i])
-    }
-    console.log("executed")
-  }
-  startPageProducts(); */
 
 
   return (
@@ -195,6 +176,9 @@ const App = () => {
           <Route path="/testing" exact> 
             <Card />
           </Route>
+          <Route exact path="/danke">
+            <ThankYou />
+          </Route>
           {/* Widerrufsbelehrung */}
           {/* {mapData.map((link) => (
         <Route path={"/" + link} key={link.id} exact>
@@ -206,7 +190,7 @@ const App = () => {
           <ProductPage 
           product={product} 
           onAddToCart={handleAddToCart} 
-          /* onUpdateCartQty={handleUpdateCartQty} */  
+          onUpdateCartQty={handleUpdateCartQty}  
           accordionData={accordionDataEh}
           handleUpdateCartQty
           />

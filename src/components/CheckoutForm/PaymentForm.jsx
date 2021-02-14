@@ -52,12 +52,12 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
       <Elements stripe={stripePromise}>
         <ElementsConsumer>{({ elements, stripe }) => (
           <form onSubmit={(e) => handleSubmit(e, elements, stripe)}>
-            <CardElement />
+            {/* <CardElement /> */}
             <br /> <br />
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button variant="outlined" onClick={backStep}>Zurück</Button>
               <Button type="submit" variant="contained" disabled={!stripe} color="primary">
-                Zahlen {checkoutToken.live.subtotal.formatted_with_symbol}
+                Zahlen {/* {checkoutToken.live.subtotal.formatted_with_symbol} */}
               </Button>
             </div>
           </form>

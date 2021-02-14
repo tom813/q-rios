@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import emailjs from 'emailjs-com';
+import Review from './Review';
+
+
 
 import { commerce } from '../../lib/commerce';
 import FormInput from './CustomTextField';
@@ -13,6 +17,7 @@ const AddressForm = ({ checkoutToken, test }) => {
   const [shippingSubdivision, setShippingSubdivision] = useState('');
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState('');
+  const [redirect, setRedirect] = useState(false);
   const methods = useForm();
 
   const fetchShippingCountries = async (checkoutTokenId) => {
@@ -48,11 +53,26 @@ const AddressForm = ({ checkoutToken, test }) => {
     if (shippingSubdivision) fetchShippingOptions(checkoutToken.id, shippingCountry, shippingSubdivision);
   }, [shippingSubdivision]);
 
+  function sendEmail(e) {
+    e.preventDefault();
+
+    emailjs.sendForm('service_w06wwwg', 'template_2ujudsd', e.target, 'user_HiOP0H3k2LFz2xNyBYlSZ')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+      e.target.reset();
+      setRedirect(true);
+  }
+
   return (
     <>
+    {redirect ? <Redirect to="/danke" /> : null}
       <Typography variant="h6" gutterBottom>Adressdaten</Typography>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit((data) => test({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
+        <form onSubmit={sendEmail}>
+          {/*      das kommt da oben rein :D  methods.handleSubmit((data) => test({ ...data, shippingCountry, shippingSubdivision, shippingOption }))*/}
           <Grid container spacing={3}>
             <FormInput required name="firstName" label="Vorname" />
             <FormInput required name="lastName" label="Nachname" />
@@ -94,11 +114,14 @@ const AddressForm = ({ checkoutToken, test }) => {
                   
             </Grid>
           </Grid>
+          <br /><hr /><br />
+                  <Review checkoutToken={checkoutToken} />
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button component={Link} variant="outlined" to="/cart">Zurück</Button>
             <Button type="submit" variant="contained" color="primary">Weiter</Button>
           </div>
+                  
         </form>
       </FormProvider>
     </>

@@ -9,5 +9,6 @@ export { default as Agb } from './Law/Agb';
 export { default as Datenschutz } from './Law/Datenschutz'; 
 export { default as Impressum } from './Law/Impressum';
 export { default as Widerrufsbelehrung } from './Law/Widerrufsbelehrung';
+export { default as ThankYou } from './ThankYou/ThankYou';
 
 

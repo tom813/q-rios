@@ -25,7 +25,7 @@ const Cart = ({ cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart }) => {
   );
 
   if (!cart.line_items) return 'Loading';
-
+    console.log(cart.line_items);
   const renderCart = () => (
     <>
       <Grid container spacing={3}>
